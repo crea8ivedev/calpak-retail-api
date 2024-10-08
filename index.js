@@ -10,7 +10,7 @@ const KLAVIYO_API_KEY = process.env.KLAVIYO_API_KEY;
 const KLAVIYO_API_URL = process.env.KLAVIYO_API_URL;
 const LIST_ID = process.env.LIST_ID;
 
-const createProfile = async (email) => {
+const createProfile = async (data) => {
     const options = {
         method: 'POST',
         headers: {
@@ -23,7 +23,9 @@ const createProfile = async (email) => {
             data: {
                 type: 'profile',
                 attributes: {
-                    email,
+                    first_name: data.first_name,
+                    last_name: data.last_name,
+                    email: data.email,
                     properties: { 'Retail Shopper': 'true' }
                 }
             }
@@ -74,7 +76,7 @@ const addToList = async (profileId) => {
 
 app.post('/api/profile/add', async (req, res) => {
     try {
-        const profileId = await createProfile(req.body.email);
+        const profileId = await createProfile(req.body);
 
         if (profileId) {
             const response = await addToList(profileId);
