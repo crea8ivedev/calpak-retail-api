@@ -7,7 +7,6 @@ require('dotenv').config();
 app.use(express.json());
 
 const KLAVIYO_API_KEY = process.env.KLAVIYO_API_KEY;
-const KLAVIYO_API_URL = process.env.KLAVIYO_API_URL;
 const LIST_ID = process.env.LIST_ID;
 
 const createProfile = async (data) => {
@@ -33,7 +32,7 @@ const createProfile = async (data) => {
     };
 
     try {
-        const response = await fetch(`${KLAVIYO_API_URL}/profile-import/`, options);
+        const response = await fetch(`https://a.klaviyo.com/api/profile-import/`, options);
 
         if (response.ok) {
             const jsonResponse = await response.json();
@@ -65,7 +64,7 @@ const addToList = async (profileId) => {
     };
 
     try {
-        const response = await fetch(`${KLAVIYO_API_URL}/lists/${LIST_ID}/relationships/profiles/`, options);
+        const response = await fetch(`https://a.klaviyo.com/api/lists/${LIST_ID}/relationships/profiles/`, options);
         if (response.ok) {
             return response;
         }
