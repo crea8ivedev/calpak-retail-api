@@ -21,12 +21,7 @@ const createProfile = async (data) => {
         body: JSON.stringify({
             data: {
                 type: 'profile',
-                attributes: {
-                    first_name: data.first_name,
-                    last_name: data.last_name,
-                    email: data.email,
-                    properties: { 'Retail Shopper': 'true' }
-                }
+                attributes: data
             }
         })
     };
