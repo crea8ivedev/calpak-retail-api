@@ -4,12 +4,28 @@ const port = 3000;
 
 require('dotenv').config();
 
+const { getCountryCallingCode } = require('libphonenumber-js');
+
 app.use(express.json());
 
 const KLAVIYO_API_KEY = process.env.KLAVIYO_API_KEY;
 const LIST_ID = process.env.LIST_ID;
 
+const getDialingCode = (countryCode) => {
+    const dialCode = getCountryCallingCode(countryCode);
+    return dialCode ? `+${dialCode}` : null;
+};
+
+let phone_number;
+
 const createProfile = async (data) => {
+    const dialingCode = getDialingCode(data.country_code);
+    phone_number = `${dialingCode}${data.phone_number}`;
+
+    const profileData = { ...data };
+    delete profileData.country_code;
+    delete profileData.phone_number;
+
     const options = {
         method: 'POST',
         headers: {
@@ -21,7 +37,7 @@ const createProfile = async (data) => {
         body: JSON.stringify({
             data: {
                 type: 'profile',
-                attributes: data
+                attributes: { ...profileData, phone_number: phone_number }
             }
         })
     };
@@ -58,8 +74,8 @@ const subscribeProfile = async (profileId, data) => {
         };
     }
 
-    if (data.phone_number) {
-        profilesData.attributes.phone_number = data.phone_number;
+    if (phone_number) {
+        profilesData.attributes.phone_number = phone_number;
         profilesData.attributes.subscriptions.sms = {
             marketing: {
                 consent: "SUBSCRIBED",
