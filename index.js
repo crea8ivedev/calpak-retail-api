@@ -51,7 +51,7 @@ const createProfile = async (data) => {
         const response = await fetch(`https://a.klaviyo.com/api/profile-import/`, options);
 
         const jsonResponse = await response?.json();
-        return jsonResponse.data.id;
+        return jsonResponse?.data?.id;
 
     } catch (error) {
         console.error('Error creating profile:', error);
