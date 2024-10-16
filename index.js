@@ -25,10 +25,8 @@ const createProfile = async (data) => {
     }
 
     const profileData = { ...data };
-    if (profileData.phone_number && profileData.country_code) {
-        delete profileData.country_code;
-        delete profileData.phone_number;
-    }
+    delete profileData.country_code;
+    delete profileData.phone_number;
 
     const options = {
         method: 'POST',
@@ -41,7 +39,10 @@ const createProfile = async (data) => {
         body: JSON.stringify({
             data: {
                 type: 'profile',
-                attributes: { ...profileData, ...(phone_number ? { phone_number: phone_number } : {}) }
+                attributes: {
+                    ...profileData,
+                    ...(phone_number ? { phone_number: phone_number } : {})
+                }
             }
         })
     };
@@ -49,13 +50,12 @@ const createProfile = async (data) => {
     try {
         const response = await fetch(`https://a.klaviyo.com/api/profile-import/`, options);
 
-        if (response.ok) {
-            const jsonResponse = await response.json();
-            return jsonResponse.data.id;
-        }
+        const jsonResponse = await response?.json();
+        return jsonResponse.data.id;
 
     } catch (error) {
         console.error('Error creating profile:', error);
+        return error;
     }
 };
 
@@ -123,6 +123,7 @@ const subscribeProfile = async (profileId, data) => {
         return response;
     } catch (error) {
         console.error('Error adding profile to list:', error);
+        return error;
     }
 };
 
