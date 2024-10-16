@@ -19,12 +19,16 @@ const getDialingCode = (countryCode) => {
 let phone_number;
 
 const createProfile = async (data) => {
-    const dialingCode = getDialingCode(data.country_code);
-    phone_number = `${dialingCode}${data.phone_number}`;
+    if (data.phone_number && data.country_code) {
+        const dialingCode = getDialingCode(data.country_code);
+        phone_number = `${dialingCode}${data.phone_number}`;
+    }
 
     const profileData = { ...data };
-    delete profileData.country_code;
-    delete profileData.phone_number;
+    if (profileData.phone_number && profileData.country_code) {
+        delete profileData.country_code;
+        delete profileData.phone_number;
+    }
 
     const options = {
         method: 'POST',
@@ -37,7 +41,7 @@ const createProfile = async (data) => {
         body: JSON.stringify({
             data: {
                 type: 'profile',
-                attributes: { ...profileData, phone_number: phone_number }
+                attributes: { ...profileData, ...(phone_number ? { phone_number: phone_number } : {}) }
             }
         })
     };
