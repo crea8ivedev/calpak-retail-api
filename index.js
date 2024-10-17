@@ -72,8 +72,7 @@ const subscribeProfile = async (profileId, data) => {
         profilesData.attributes.email = data.email;
         profilesData.attributes.subscriptions.email = {
             marketing: {
-                consent: "SUBSCRIBED",
-                consented_at: "2023-10-01T12:00:00Z"
+                consent: "SUBSCRIBED"
             }
         };
     }
@@ -82,8 +81,7 @@ const subscribeProfile = async (profileId, data) => {
         profilesData.attributes.phone_number = phone_number;
         profilesData.attributes.subscriptions.sms = {
             marketing: {
-                consent: "SUBSCRIBED",
-                consented_at: "2023-10-01T12:00:00Z"
+                consent: "SUBSCRIBED"
             }
         };
     }
@@ -104,7 +102,7 @@ const subscribeProfile = async (profileId, data) => {
                     profiles: {
                         data: [profilesData]
                     },
-                    historical_import: true
+                    historical_import: false
                 },
                 relationships: {
                     list: {
